@@ -34,6 +34,7 @@ describe("When no answer is selected", () => {
   beforeAll(() => {
     wrapper = mount(<AuthorQuiz {...state} onAnswerSelected={() => {}} />);
   });
+
   it("should have white background color", () => {
     expect(wrapper.find("div.row.turn").props().style.backgroundColor).toBe(
       "white"
@@ -43,6 +44,7 @@ describe("When no answer is selected", () => {
 
 describe("When a wrong answer is selected", () => {
   let wrapper;
+
   beforeAll(() => {
     wrapper = mount(
       <AuthorQuiz
@@ -51,6 +53,7 @@ describe("When a wrong answer is selected", () => {
       />
     );
   });
+
   it("should have red background color", () => {
     expect(wrapper.find("div.row.turn").props().style.backgroundColor).toBe(
       "#F84622"
@@ -60,6 +63,7 @@ describe("When a wrong answer is selected", () => {
 
 describe("When a correct answer is selected", () => {
   let wrapper;
+
   beforeAll(() => {
     wrapper = mount(
       <AuthorQuiz
@@ -68,9 +72,33 @@ describe("When a correct answer is selected", () => {
       />
     );
   });
+
   it("should have green background color", () => {
     expect(wrapper.find("div.row.turn").props().style.backgroundColor).toBe(
       "#44C62D"
     );
+  });
+});
+
+describe("When user selects first answer", () => {
+  const handleAnswerSelected = jest.fn();
+  let wrapper;
+
+  beforeAll(() => {
+    wrapper = mount(
+      <AuthorQuiz {...state} onAnswerSelected={handleAnswerSelected} />
+    );
+    wrapper
+      .find(".answer")
+      .first()
+      .simulate("click");
+  });
+
+  it("onAnswerSelected function is called", () => {
+    expect(handleAnswerSelected).toHaveBeenCalled();
+  });
+
+  it("should receive The Shining as answer", () => {
+    expect(handleAnswerSelected).toHaveBeenCalledWith("The Shining");
   });
 });
