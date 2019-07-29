@@ -1,7 +1,9 @@
 import React from "react";
+import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import ReactDOM from "react-dom";
 import "./index.css";
 import AuthorQuiz from "./AuthorQuiz";
+import AddAuthorForm from "./AddAuthorForm";
 import * as serviceWorker from "./serviceWorker";
 import { sample, shuffle } from "underscore";
 
@@ -70,9 +72,28 @@ function onAnswerSelected(answer) {
   render();
 }
 
+function App() {
+  return <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />;
+}
+
+const AuthorWrapper = withRouter(({ history }) => (
+  <AddAuthorForm
+    onAddAuthor={author => {
+      authors.push(author);
+      history.push("/");
+      console.log(authors);
+    }}
+  />
+));
+
 function render() {
   ReactDOM.render(
-    <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />,
+    <BrowserRouter>
+      <>
+        <Route exact path="/" component={App} />
+        <Route path="/add" component={AuthorWrapper} />
+      </>
+    </BrowserRouter>,
     document.getElementById("root")
   );
 }
